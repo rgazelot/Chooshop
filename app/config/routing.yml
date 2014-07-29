@@ -1,0 +1,4 @@
+ChooshopBundle:
+    resource: "@ChooshopBundle/Controller/"
+    type:     annotation
+    prefix:   /
