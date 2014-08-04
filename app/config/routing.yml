@@ -1,4 +1,4 @@
-ChooshopBundle:
-    resource: "@ChooshopBundle/Controller/"
-    type:     annotation
-    prefix:   /
+users:
+    type: rest
+    resource: Chooshop\ChooshopBundle\Controller\UserController
+    prefix: /api/1
