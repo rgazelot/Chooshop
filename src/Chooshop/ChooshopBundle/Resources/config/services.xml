@@ -5,10 +5,22 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="chooshop.api.request_listener.class">Chooshop\ChooshopBundle\EventListener\RequestListener</parameter>
+        <parameter key="chooshop.api.login.class">Chooshop\ChooshopBundle\Service\Api\Login</parameter>
         <parameter key="chooshop.user.class">Chooshop\ChooshopBundle\Service\User</parameter>
     </parameters>
 
     <services>
+
+        <service id="chooshop.api.request_listener" class="%chooshop.api.request_listener.class%">
+            <argument type="service" id="chooshop.api.login" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="-8" />
+        </service>
+        <service id="chooshop.api.login" class="%chooshop.api.login.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+        </service>
+
         <service id="chooshop.user" class="%chooshop.user.class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>

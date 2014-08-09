@@ -26,7 +26,9 @@
         "friendsofsymfony/rest-bundle": "~1.4"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "behat/behat": "~3.0.6",
+        "behat/web-api-extension": "~1.0@dev"
     },
     "scripts": {
         "post-root-package-install": [

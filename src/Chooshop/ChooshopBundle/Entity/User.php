@@ -6,13 +6,14 @@ use Datetime;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity,
+    Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Chooshop\ChooshopBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="User")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -46,6 +47,11 @@ class User
      */
     private $roles;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $token;
+
     public function __construct($email, $firstname, $lastname, $role = null)
     {
         $this->email = $email;
@@ -53,7 +59,43 @@ class User
         $this->lastname = $lastname;
 
         $this->signupAt = new Datetime;
-        $this->roles = null !== $role ? [$role] : ['ROLE_USER'];
+        $this->token = sha1(uniqid(true) . time());
+
+        $this->roles = ['ROLE_USER'];
+
+        if (null !== $role && 'ROLE_USER' !== $role) {
+            $this->roles = array_merge($this->roles, [$role]);
+        }
+    }
+
+    /**
+     * {@inheriteDoc}
+     */
+    public function getPassword()
+    {
+    }
+
+    /**
+     * {@inheriteDoc}
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheriteDoc}
+     */
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * {@inheriteDoc}
+     */
+    public function eraseCredentials()
+    {
     }
 
     public function setEmail($email)

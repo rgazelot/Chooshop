@@ -1,0 +1,9 @@
+users:
+    type: rest
+    resource: Chooshop\ChooshopBundle\Controller\UserController
+    name_prefix: api_
+
+products:
+    type: rest
+    resource: Chooshop\ChooshopBundle\Controller\ProductController
+    name_prefix: api_

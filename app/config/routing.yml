@@ -1,4 +1,4 @@
-users:
-    type: rest
-    resource: Chooshop\ChooshopBundle\Controller\UserController
-    prefix: /api/1
+api:
+  type: rest
+  prefix: /api/1
+  resource: @ChooshopBundle/Resources/config/routing.yml
