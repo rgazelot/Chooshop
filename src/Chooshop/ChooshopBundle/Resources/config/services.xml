@@ -8,6 +8,7 @@
         <parameter key="chooshop.api.request_listener.class">Chooshop\ChooshopBundle\EventListener\RequestListener</parameter>
         <parameter key="chooshop.api.login.class">Chooshop\ChooshopBundle\Service\Api\Login</parameter>
         <parameter key="chooshop.user.class">Chooshop\ChooshopBundle\Service\User</parameter>
+        <parameter key="chooshop.product.class">Chooshop\ChooshopBundle\Service\Product</parameter>
     </parameters>
 
     <services>
@@ -22,6 +23,10 @@
         </service>
 
         <service id="chooshop.user" class="%chooshop.user.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+        <service id="chooshop.product" class="%chooshop.product.class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
     </services>

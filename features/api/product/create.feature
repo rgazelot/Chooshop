@@ -1,9 +1,30 @@
-Feature: foo
+Feature: Related to the product API
+  The creation of product
 
-Scenario: foo
-  Given I use the token "72bd56d223ba5baf5b7077101228e1883f720cd3"
+Scenario: Create product without a mandatory parameter
+  Given I use the token "myBehatToken"
   When I send a POST request to "/products" with body:
   """
-  {"foo": "bar"}
+  {"priority": 1}
   """
-  Then print response
+  Then the response code should be 400
+
+Scenario: Create product without a mandatory parameter
+  Given I use the token "myBehatToken"
+  When I send a POST request to "/products" with body:
+  """
+  {"name": "foo"}
+  """
+  Then the response code should be 400
+
+Scenario: Create a product
+  Given I use the token "myBehatToken"
+  When I send a POST request to "/products" with body:
+  """
+  {
+    "name": "Tomatoes",
+    "priority": 1,
+    "description": "Italian tomatoes"
+  }
+  """
+  Then the response code should be 200

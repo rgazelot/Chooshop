@@ -6,11 +6,19 @@ use Datetime;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation\ExclusionPolicy,
+    JMS\Serializer\Annotation\Expose,
+    JMS\Serializer\Annotation\MaxDepth,
+    JMS\Serializer\Annotation\Groups,
+    JMS\Serializer\Annotation\Type;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Chooshop\ChooshopBundle\Entity\Repository\ProductRepository")
  * @ORM\Table(name="Product")
+ *
+ * @ExclusionPolicy("all")
  */
 class Product
 {
@@ -23,48 +31,78 @@ class Product
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Expose
+     * @Groups({"product_details", "product_list"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+     *
+     * @Expose
+     * @Groups({"product_details", "product_list"})
      */
     private $name;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
+     *
+     * @Expose
+     * @Type("integer")
+     * @Groups({"product_details", "product_list"})
      */
     private $priority;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *
+     * @Expose
+     * @Groups({"product_details"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Expose
+     * @Groups({"product_details"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
+     *
+     * @Expose
+     * @Groups({"product_details", "product_list"})
      */
     private $bought;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @Expose
+     * @Groups({"product_details"})
      */
     private $boughtAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Chooshop\ChooshopBundle\Entity\User", inversedBy="products")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *
+     * @Expose
+     * @MaxDepth(1)
+     * @Groups({"product_details"})
+     */
     private $owner;
 
-    public function __construct($name, User $owner)
+    public function __construct($name, User $owner, $priority = self::PRIORITY_NONE, $description = null)
     {
         $this->name = $name;
         $this->owner = $owner;
 
-        $this->priority = self::PRIORITY_NONE;
-        $this->description = null;
+        $this->priority = $priority;
+        $this->description = $description;
         $this->createdAt = new Datetime;
         $this->bought = false;
         $this->boughtAt = null;

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand,
     Symfony\Component\Console\Output\OutputInterface;
 
 use Chooshop\ChooshopBundle\DTO\UserTransfer,
+    Chooshop\ChooshopBundle\Entity\House,
     Chooshop\ChooshopBundle\Form\UserType;
 
 class UserCreateCommand extends ContainerAwareCommand
@@ -20,6 +21,7 @@ class UserCreateCommand extends ContainerAwareCommand
         $this
             ->setName('chooshop:user:create')
             ->setDescription('Create an user')
+            ->addArgument('house', InputArgument::REQUIRED, 'The house name')
             ->addArgument('email', InputArgument::REQUIRED, 'The user email')
             ->addArgument('firstname', InputArgument::REQUIRED, 'The user firstname')
             ->addArgument('lastname', InputArgument::REQUIRED, 'The user lastname')
@@ -43,7 +45,13 @@ class UserCreateCommand extends ContainerAwareCommand
             throw new InvalidArgumentException("Invalid form argument");
         }
 
-        $this->getContainer()->get('chooshop.user')->create($userTransfer);
+        $house = $this->getContainer()->get('doctrine.orm.entity_manager')->getRepository('ChooshopBundle:House')->findOneByName($input->getArgument('house'));
+
+        if (null === $house) {
+            $house = new House($input->getArgument('house'));
+        }
+
+        $this->getContainer()->get('chooshop.user')->create($house, $userTransfer);
         $output->writeLn('User created');
     }
 }

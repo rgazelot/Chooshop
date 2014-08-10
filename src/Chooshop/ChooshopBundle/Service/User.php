@@ -8,7 +8,8 @@ use Doctrine\ORM\EntityManager,
 use Chooshop\ChooshopBundle\DTO\UserTransfer,
     Chooshop\ChooshopBundle\Exception\EmailUnavailableException,
     Chooshop\ChooshopBundle\Exception\UserNotFoundException,
-    Chooshop\ChooshopBundle\Entity\User as UserEntity;
+    Chooshop\ChooshopBundle\Entity\User as UserEntity,
+    Chooshop\ChooshopBundle\Entity\House;
 
 class User
 {
@@ -31,7 +32,7 @@ class User
     /**
      * @throw EmailUnavailableException
      */
-    public function create(UserTransfer $userTransfer)
+    public function create(House $house, UserTransfer $userTransfer)
     {
         try {
             $this->get($userTransfer->getEmail());
@@ -46,6 +47,9 @@ class User
             $userTransfer->getRole()
         );
 
+        $house->addPeople($user);
+
+        $this->em->persist($house);
         $this->em->persist($user);
         $this->em->flush();
 
