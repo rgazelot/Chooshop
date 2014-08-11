@@ -2,6 +2,8 @@
 
 namespace Chooshop\ChooshopBundle\Exception;
 
+use Exception;
+
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductNotFoundException extends NotFoundHttpException

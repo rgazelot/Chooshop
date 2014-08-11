@@ -190,4 +190,9 @@ class Product
     {
         return $this->boughtAt;
     }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
 }

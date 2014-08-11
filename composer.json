@@ -30,7 +30,8 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "behat/behat": "~3.0.6",
-        "behat/web-api-extension": "~1.0@dev"
+        "behat/web-api-extension": "~1.0@dev",
+        "phpunit/phpunit": "~3.7"
     },
     "scripts": {
         "post-root-package-install": [

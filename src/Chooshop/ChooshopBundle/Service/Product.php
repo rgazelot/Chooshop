@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager,
 use Chooshop\ChooshopBundle\DTO\ProductTransfer,
     Chooshop\ChooshopBundle\Exception\ProductNotFoundException,
     Chooshop\ChooshopBundle\Entity\User,
+    Chooshop\ChooshopBundle\Entity\House,
     Chooshop\ChooshopBundle\Entity\Product as ProductEntity;
 
 class Product
@@ -19,17 +20,17 @@ class Product
         $this->em = $em;
     }
 
-    public function all()
+    public function all(House $house)
     {
-        return $this->em->getRepository('ChooshopBundle:Product')->all();
+        return $this->em->getRepository('ChooshopBundle:Product')->all($house);
     }
 
-    public function get($id)
+    public function get($id, House $house)
     {
         try {
-            return $this->em->getRepository('ChooshopBundle:Product')->get($id);
+            return $this->em->getRepository('ChooshopBundle:Product')->get($id, $house);
         } catch (NoResultException $e) {
-            throw new ProductNotFoundException(sprintf('Product with the id %d not found', $id));
+            throw new ProductNotFoundException(sprintf('Product with the id %d not found', $id), $e);
         }
     }
 

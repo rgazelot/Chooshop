@@ -2,10 +2,7 @@
 
 namespace Chooshop\ChooshopBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController,
-    FOS\RestBundle\Controller\Annotations\RouteResource;
-
-use JMS\Serializer\SerializationContext;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -13,26 +10,20 @@ use Symfony\Component\HttpFoundation\Request,
 use Chooshop\ChooshopBundle\DTO\ProductTransfer,
     Chooshop\ChooshopBundle\Form\ProductType;
 
-class ProductController extends FOSRestController
+class ProductController extends Controller
 {
     public function getProductAction($id)
     {
-        $product = $this->get('chooshop.product')->get($id);
+        $product = $this->get('chooshop.product')->get($id, $this->getUser()->getHouse());
 
-        $view = $this->view($product, 200);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['product_details']));
-
-        return $view;
+        return $this->view($product, 200, [], ['product_details']);
     }
 
     public function getProductsAction()
     {
-        $products = $this->get('chooshop.product')->all();
+        $products = $this->get('chooshop.product')->all($this->getUser()->getHouse());
 
-        $view = $this->view($products, 200);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['product_list']));
-
-        return $view;
+        return $this->view($products, 200, [], ['product_list']);
     }
 
     public function postProductsAction(Request $request)
@@ -48,16 +39,12 @@ class ProductController extends FOSRestController
 
         $product = $this->get('chooshop.product')->create($productTransfer, $this->getUser());
 
-        $view = $this->view($product, 200);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['product_details']));
-
-        return $view;
+        return $this->view($product, 200, [], ['product_details']);
     }
 
     public function putProductAction(Request $request, $id)
     {
-        $productApi = $this->get('chooshop.product');
-        $product = $productApi->get($id);
+        $product = $this->get('chooshop.product')->get($id);
 
         $productTransfer = new ProductTransfer;
 
@@ -70,16 +57,12 @@ class ProductController extends FOSRestController
 
         $this->get('chooshop.product')->edit($product, $productTransfer);
 
-        $view = $this->view($product, 200);
-        $view->setSerializationContext(SerializationContext::create()->setGroups(['product_details']));
-
-        return $view;
+        return $this->view($product, 200, [], ['product_details']);
     }
 
     public function deleteProductAction($id)
     {
-        $productApi = $this->get('chooshop.product');
-        $product = $productApi->get($id);
-        $productApi->delete($product);
+        $product = $this->get('chooshop.product')->get($id);
+        $this->get('chooshop.product')->delete($product);
     }
 }

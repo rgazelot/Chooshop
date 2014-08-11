@@ -32,6 +32,8 @@ class ProductTransfer
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     public function getName()
@@ -42,6 +44,8 @@ class ProductTransfer
     public function setPriority($priority)
     {
         $this->priority = $priority;
+
+        return $this;
     }
 
     public function getPriority()
@@ -52,6 +56,8 @@ class ProductTransfer
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     public function getDescription()
